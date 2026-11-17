@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Home - NetSentry{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-content">
+        <h2>Network Reconnaissance & Traffic Analysis Platform</h2>
+        <p class="hero-subtitle">Analyze Nmap reconnaissance and Wireshark traffic evidence to identify network scanning patterns and generate security findings.</p>
+        <div class="hero-buttons">
+            <a href="/dashboard" class="btn btn-primary">View Dashboard</a>
+            <a href="#how-it-works" class="btn btn-secondary">Learn More</a>
+        </div>
+    </div>
+</section>
+
+<section id="how-it-works" class="how-it-works">
+    <h2>How It Works</h2>
+    <div class="workflow-grid">
+        <div class="workflow-step">
+            <div class="step-number">1</div>
+            <h3>Collect Reconnaissance Data</h3>
+            <p>Perform Nmap scans on your target network to identify active hosts and open services.</p>
+        </div>
+        <div class="workflow-step">
+            <div class="step-number">2</div>
+            <h3>Capture Network Traffic</h3>
+            <p>Use Wireshark to capture packet-level evidence of network activity during scanning.</p>
+        </div>
+        <div class="workflow-step">
+            <div class="step-number">3</div>
+            <h3>Analyze Packets</h3>
+            <p>NetSentry parses raw traffic data to extract meaningful network reconnaissance patterns.</p>
+        </div>
+        <div class="workflow-step">
+            <div class="step-number">4</div>
+            <h3>Detect Scanning Patterns</h3>
+            <p>Detection engine identifies potential TCP port scanning based on traffic characteristics.</p>
+        </div>
+        <div class="workflow-step">
+            <div class="step-number">5</div>
+            <h3>Generate Findings</h3>
+            <p>Produce structured security findings with evidence, analysis, and recommendations.</p>
+        </div>
+        <div class="workflow-step">
+            <div class="step-number">6</div>
+            <h3>Risk Assessment</h3>
+            <p>Calculate risk scores and prioritize findings for investigation and response.</p>
+        </div>
+    </div>
+</section>
+
+<section class="features">
+    <h2>Key Features</h2>
+    <div class="features-grid">
+        <div class="feature-card">
+            <h3>Nmap Analysis</h3>
+            <p>Parse Nmap XML and text output to extract port state information and service details.</p>
+        </div>
+        <div class="feature-card">
+            <h3>PCAP Analysis</h3>
+            <p>Analyze Wireshark packet captures to identify TCP SYN patterns and scanning behavior.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Detection Engine</h3>
+            <p>Rule-based detection of TCP port scanning with configurable thresholds.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Risk Scoring</h3>
+            <p>Multi-factor risk assessment to prioritize reconnaissance findings.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Data Correlation</h3>
+            <p>Correlate Nmap results with PCAP evidence for comprehensive analysis.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Professional Dashboard</h3>
+            <p>Real-time visualization of reconnaissance patterns and security metrics.</p>
+        </div>
+    </div>
+</section>
+
+<section class="cta">
+    <h2>Get Started</h2>
+    <p>Upload your Nmap results and Wireshark packet captures to begin analysis.</p>
+    <a href="/dashboard" class="btn btn-primary">Go to Dashboard</a>
+</section>
+{% endblock %}

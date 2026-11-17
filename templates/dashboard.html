@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - NetSentry{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <div class="dashboard-header">
+        <h1>Network Security Analysis Dashboard</h1>
+        <p class="subtitle">Nmap Reconnaissance & Wireshark Traffic Analysis</p>
+    </div>
+
+    <!-- Quick Upload Section -->
+    <section class="upload-section">
+        <div class="upload-panel">
+            <h2>Upload Evidence</h2>
+            <div class="upload-area">
+                <label for="nmap-input" class="upload-label">
+                    <span class="upload-icon">📄</span>
+                    <span class="upload-text">Upload Nmap Results (XML or Text)</span>
+                </label>
+                <input type="file" id="nmap-input" accept=".xml,.txt" style="display: none;">
+                <p class="upload-hint">Supports Nmap XML or text output</p>
+            </div>
+            <div class="upload-area">
+                <label for="pcap-input" class="upload-label">
+                    <span class="upload-icon">🔍</span>
+                    <span class="upload-text">Upload PCAP/Wireshark Data (CSV or PCAP)</span>
+                </label>
+                <input type="file" id="pcap-input" accept=".pcap,.pcapng,.csv,.txt" style="display: none;">
+                <p class="upload-hint">Wireshark CSV export or PCAP files</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Environment Info -->
+    <section class="environment-info">
+        <div class="info-card">
+            <h3>Lab Environment</h3>
+            <div class="info-grid">
+                <div class="info-item">
+                    <label>Scanner IP:</label>
+                    <span class="value">192.168.71.128</span>
+                </div>
+                <div class="info-item">
+                    <label>Target IP:</label>
+                    <span class="value">192.168.71.1</span>
+                </div>
+                <div class="info-item">
+                    <label>Network Type:</label>
+                    <span class="value">VMware VMnet1</span>
+                </div>
+                <div class="info-item">
+                    <label>Subnet:</label>
+                    <span class="value">192.168.71.0/24</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Metrics Dashboard -->
+    <section class="metrics" id="metrics">
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-icon">🔌</div>
+                <div class="metric-content">
+                    <h4>Ports Scanned</h4>
+                    <div class="metric-value" id="metric-ports">0</div>
+                </div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-icon">✅</div>
+                <div class="metric-content">
+                    <h4>Open Ports</h4>
+                    <div class="metric-value" id="metric-open">0</div>
+                </div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-icon">🚫</div>
+                <div class="metric-content">
+                    <h4>Filtered Ports</h4>
+                    <div class="metric-value" id="metric-filtered">0</div>
+                </div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-icon">📡</div>
+                <div class="metric-content">
+                    <h4>TCP SYN Packets</h4>
+                    <div class="metric-value" id="metric-syn">0</div>
+                </div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-icon">🎯</div>
+                <div class="metric-content">
+                    <h4>Unique Dest Ports</h4>
+                    <div class="metric-value" id="metric-unique-ports">0</div>
+                </div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-icon">⚠️</div>
+                <div class="metric-content">
+                    <h4>Risk Score</h4>
+                    <div class="metric-value" id="metric-risk">--</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Detection Alert -->
+    <section class="detection-alert" id="detection-alert">
+        <div class="alert-box alert-info">
+            <div class="alert-icon">ℹ️</div>
+            <div class="alert-content">
+                <h3>Analysis Status</h3>
+                <p>Upload evidence files to begin analysis and detection.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Charts Section -->
+    <section class="charts-section">
+        <div class="chart-container">
+            <h2>Destination Port Distribution</h2>
+            <canvas id="portChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <h2>Risk Assessment</h2>
+            <canvas id="riskChart"></canvas>
+        </div>
+    </section>
+
+    <!-- Nmap Analysis -->
+    <section class="analysis-section">
+        <h2>Nmap Analysis</h2>
+        <div class="analysis-content" id="nmap-analysis">
+            <p class="placeholder">No Nmap data loaded. Upload Nmap results to see analysis.</p>
+        </div>
+    </section>
+
+    <!-- PCAP Analysis -->
+    <section class="analysis-section">
+        <h2>PCAP / Wireshark Analysis</h2>
+        <div class="analysis-content" id="pcap-analysis">
+            <p class="placeholder">No PCAP data loaded. Upload packet capture to see analysis.</p>
+        </div>
+    </section>
+
+    <!-- Correlation -->
+    <section class="analysis-section">
+        <h2>Nmap ↔ Wireshark Correlation</h2>
+        <div class="analysis-content" id="correlation-analysis">
+            <p class="placeholder">Upload both Nmap and PCAP evidence to see correlation analysis.</p>
+        </div>
+    </section>
+
+    <!-- Findings -->
+    <section class="findings-section">
+        <h2>Security Findings</h2>
+        <div id="findings-list"></div>
+    </section>
+
+    <!-- Recommendations -->
+    <section class="recommendations-section">
+        <h2>Security Recommendations</h2>
+        <div id="recommendations-list"></div>
+    </section>
+
+    <!-- Evidence Summary -->
+    <section class="evidence-section">
+        <h2>Analysis Summary</h2>
+        <div class="evidence-table">
+            <table>
+                <tr>
+                    <td><strong>Analysis Time:</strong></td>
+                    <td id="evidence-time">--</td>
+                </tr>
+                <tr>
+                    <td><strong>Nmap File:</strong></td>
+                    <td id="evidence-nmap">--</td>
+                </tr>
+                <tr>
+                    <td><strong>PCAP File:</strong></td>
+                    <td id="evidence-pcap">--</td>
+                </tr>
+                <tr>
+                    <td><strong>Detection Status:</strong></td>
+                    <td id="evidence-detection">Not detected</td>
+                </tr>
+            </table>
+        </div>
+    </section>
+</div>
+
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}
